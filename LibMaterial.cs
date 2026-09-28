@@ -16,6 +16,7 @@ namespace MateriaLib
         public PhysicalMaterial physicalMaterial { get; private set; }
         public GameObject ingot = null;
         public int unlockAt = 0;
+        public bool addToList = true;
         public LibMaterial(string name, int hash)
         {
             physicalMaterial = UnityEngine.Object.Instantiate(HashedGeneralValue<PhysicalMaterial>.Get((uint)MaterialType.metal));
@@ -127,6 +128,19 @@ namespace MateriaLib
             physicalMaterial.materialChannels[channel].material = visMaterial;
             physicalMaterial.materialChannels[channel].atlasedMaterial = visMaterial2;
             physicalMaterial.materialChannels[channel].nonDeformingMaterial = visMaterial2;
+        }
+
+        public Material GetMaterialFromChannelSpot(int channel, int spot)
+        {
+            switch (spot)
+            {
+                default:
+                    return physicalMaterial.materialChannels[channel].material;
+                case 2:
+                    return physicalMaterial.materialChannels[channel].atlasedMaterial;
+                case 3:
+                    return physicalMaterial.materialChannels[channel].nonDeformingMaterial;
+            }
         }
 
         public static readonly List<LibMaterial> NewMaterials = new List<LibMaterial>();

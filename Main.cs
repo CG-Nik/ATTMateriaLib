@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-[assembly: MelonInfo(typeof(MateriaLib.Main), "MateriaLib", "1.0.0", "Circl")]
+[assembly: MelonInfo(typeof(MateriaLib.Main), "MateriaLib", "1.1.0", "Circl")]
 
 namespace MateriaLib
 {
@@ -40,17 +40,19 @@ namespace MateriaLib
 
             foreach (LibMaterial material in LibMaterial.NewMaterials)
             {
-                try
+                if (material.addToList)
                 {
-                    HashedGeneralValue<PhysicalMaterial>.items.Add((uint)material.physicalMaterial.hash, material.physicalMaterial);
+                    try
+                    {
+                        HashedGeneralValue<PhysicalMaterial>.items.Add((uint)material.physicalMaterial.hash, material.physicalMaterial);
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonLogger.Msg("There is a problem with a material");
+                        MelonLogger.Msg($"{material.physicalMaterial.name} : {material.physicalMaterial.hash}");
+                        MelonLogger.Error(ex);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    MelonLogger.Msg("There is a problem with a material");
-                    MelonLogger.Msg($"{material.physicalMaterial.name} : {material.physicalMaterial.hash}");
-                    MelonLogger.Error(ex);
-                }
-                
             }
 
             MouldDefinition mould = HashedGeneralValue<MouldDefinition>.Get(22952);
@@ -85,16 +87,6 @@ namespace MateriaLib
                     }
 
                     ListSimp.Add(material.physicalMaterial);
-                    try
-                    {
-                        NetworkPrefab netPref = material.ingot.GetComponent<NetworkPrefab>();
-                        PrefabManager.prefabMap.Add((uint)netPref.hash, netPref);
-                        HashedGeneralValue<Item>.items.Add((uint)material.ingot.GetComponent<Pickup>().item.hash, material.ingot.GetComponent<Pickup>().item);
-                    }
-                    catch
-                    {
-                        MelonLogger.Msg($"Encountered a problem with ingot of material {material.physicalMaterial.name}");
-                    }
                 }
             }
 
