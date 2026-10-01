@@ -10,7 +10,8 @@ namespace MateriaLib
         {
             metal = 1, //iron
             wood = 24722, //oak
-            leather = 33384 //dais leather
+            leather = 33384, //dais leather
+            canvas = 61790 //canvas
         }
         
         public PhysicalMaterial physicalMaterial { get; private set; }
@@ -117,6 +118,11 @@ namespace MateriaLib
         public void ReplaceAllMaterials(Material leather)
         {
             ReplaceMaterialsInChannel(0, leather);
+        }
+        public void ReplaceAllMaterials(Material worn, Material cutout)
+        {
+            ReplaceMaterialsInChannel(0, worn);
+            ReplaceMaterialsInChannel(1, cutout);
         }
         public void ReplaceMaterialsInChannel(int channel, Material visMaterial)
         {
